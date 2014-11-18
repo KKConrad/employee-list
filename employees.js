@@ -56,12 +56,17 @@ function render_edit_box(type, employee, index){
         pre_phone + '"></div><div class="col-xs-4"><label>Address</label><input id="edit_address" class="form-control" value="' +
         pre_address + '"></div>';
     var button_name = type == "add" ? "add it" : "update it";
-    var cancel_button = type == "cancel" ? "cancel it" : "cancel this";
+    var cancel_button = type == "cancel" ? "cancel it" : "cancel edit";
 
     html += "<button id='saveit'>"+ button_name + "</button>";
     html += "<button id='cancel'>"+ cancel_button + "</button>";
 
+
     $('#edit_box').html(html);
+    $('#cancel').click(function() {
+        console.log("Clicked");
+        $("#edit_box").html('');
+    });
 
     $('#saveit').click(function(){
         var e = {
@@ -78,12 +83,6 @@ function render_edit_box(type, employee, index){
         $("#edit_box").html('');
     })
 }
-    $('#cancel').click(function() {
-        console.log("Clicked");
-        $('#cancel_button').collapse({
-            toggle: false
-        })
-    });
 
 function update_employee(data, index){
     console.log("update Employee " + index);
@@ -98,7 +97,7 @@ function add_employee(data){
 }
 
 function render_employee_table(data) {
-    console.log('render employee table')
+    console.log('render employee table');
     var html;
 
     html = "<table class='table table-striped'>";
