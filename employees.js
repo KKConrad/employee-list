@@ -99,10 +99,10 @@ function add_employee(data){
         data: data
     })
         .done(function(){
-            employees.push(data);
-             render_employee_table(employees);
+            getEmployees();
     })
-}
+};
+
 function render_employee_table(data) {
     console.log('render employee table');
     var html;
@@ -157,7 +157,7 @@ function render_employee_table(data) {
             if (status == google.maps.GeocoderStatus.OK) {
                 $("#map-canvas").show();
                 $(".hide-map").show();
-                google.maps.event.trigger(map,'resize'); // Tells googlemaps that we resized it. Without this line, it would bug out.
+                google.maps.event.trigger(map,'resize'); // Tells googlemaps that it resized. Without this line, it would bug out.
                 map.setCenter(results[0].geometry.location);
                 var marker = new google.maps.Marker({
                     map: map,
