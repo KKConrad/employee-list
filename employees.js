@@ -22,6 +22,11 @@ var employees = [
         name: "Ronald",
         phone: "(303) 776-9383",
         address: "245 S Main St Longmont, CO"
+    },
+    {
+        name: "Noid",
+        phone: "(303) 772-3030",
+        address: "1106 Main St, Longmont, CO 80501"
     }
 ];
 
@@ -55,8 +60,8 @@ function render_edit_box(type, employee, index){
         pre_name + '"></div><div class="col-xs-3"><label>Phone</label> <input id="edit_phone" class="form-control" value="'+
         pre_phone + '"></div><div class="col-xs-4"><label>Address</label><input id="edit_address" class="form-control" value="' +
         pre_address + '"></div>';
-    var button_name = type == "add" ? "add it" : "update it";
-    var cancel_button = type == "cancel" ? "cancel it" : "cancel edit";
+    var button_name = type == "add" ? "Add It" : "update it";
+    var cancel_button = type == "cancel" ? "cancel it" : "Cancel Edit";
 
     html += "<button id='saveit'>"+ button_name + "</button>";
     html += "<button id='cancel'>"+ cancel_button + "</button>";
@@ -139,11 +144,17 @@ function render_employee_table(data) {
         map_location(employees[$(this).attr("index")].address);
     });
 
+    $('.hide-map').click(function() {
+        console.log('hide map click.');
+        $("#map-canvas").hide();
+        $('.hide-map').hide();
+    });
 
     function map_location(address) {
         geocoder.geocode( { 'address': address}, function(results, status) { // Decided to omit lat and lng and use address.
             if (status == google.maps.GeocoderStatus.OK) {
                 $("#map-canvas").show();
+                $(".hide-map").show();
                 google.maps.event.trigger(map,'resize'); // Tells googlemaps that we resized it. Without this line, it would bug out.
                 map.setCenter(results[0].geometry.location);
                 var marker = new google.maps.Marker({
@@ -152,7 +163,7 @@ function render_employee_table(data) {
                 });
             } else {
                 $("#map-canvas").hide(); //I want to hide the map if there's an error.
-                alert('Geocode was not successful for the following reason: ' + status);
+                alert('Cannot geocode because of this:' + status);
             }
         });
     }
