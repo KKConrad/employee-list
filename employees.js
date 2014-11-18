@@ -12,31 +12,27 @@ function initializeMap() {
 }
 google.maps.event.addDomListener(window, 'load', initializeMap);
 
-var employees = [
-    {
-        name: "Wendy",
-        phone: "800-555-5555",
-        address: "455 S. Boulder Rd, Lafayette, CO"
-    },
-    {
-        name: "Ronald",
-        phone: "(303) 776-9383",
-        address: "245 S Main St Longmont, CO"
-    },
-    {
-        name: "Noid",
-        phone: "(303) 772-3030",
-        address: "1106 Main St, Longmont, CO 80501"
-    }
-];
+var employees = [];
+;
 
 $(document).ready(function(){
-    render_employee_table(employees);
-    $("#add").click(function() {
-        console.log('clicked!');
-        render_edit_box('add');
-    });
+    (getEmployees());
 });
+
+function getEmployees(){
+    $.ajax({
+        url: 'http://69.164.197.6/employees/',
+        success: function(employee_data){
+            employees=employee_data;
+            render_employee_table(employee_data);
+        }
+    })
+        .done(function() {
+            $('#add').click(function(){
+                render_edit_box('add');
+            });
+        });
+};
 
 function terminate_employee(index){
     console.log(index);
@@ -92,13 +88,14 @@ function render_edit_box(type, employee, index){
 function update_employee(data, index){
     console.log("update Employee " + index);
     console.log(data);
+    getEmployees()
     employees[index] = data;
     render_employee_table(employees);
 }
 
 function add_employee(data){
     employees.push(data);
-    render_employee_table(employees)
+    render_employee_table(employees);
 }
 
 function render_employee_table(data) {
