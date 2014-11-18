@@ -56,8 +56,8 @@ function render_edit_box(type, employee, index){
         pre_name + '"></div><div class="col-xs-3"><label>Phone</label> <input id="edit_phone" class="form-control" value="'+
         pre_phone + '"></div><div class="col-xs-4"><label>Address</label><input id="edit_address" class="form-control" value="' +
         pre_address + '"></div>';
-    var button_name = type == "add" ? "Add It" : "update it";
-    var cancel_button = type == "cancel" ? "cancel it" : "Cancel Edit";
+    var button_name = type == "add" ? "Add It" : "Update it";
+    var cancel_button = type == "cancel" ? "Cancel" : "Cancel This";
 
     html += "<button id='saveit'>"+ button_name + "</button>";
     html += "<button id='cancel'>"+ cancel_button + "</button>";
