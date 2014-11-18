@@ -1,3 +1,16 @@
+var map;
+var geocoder;
+
+function initializeMap() {
+    var mapOptions = {
+        center: { lat: 40.397, lng: -105.12},
+        zoom: 8
+    };
+    map = new google.maps.Map(document.getElementById('map-canvas'),
+        mapOptions);
+    geocoder = new google.maps.Geocoder();
+}
+google.maps.event.addDomListener(window, 'load', initializeMap);
 
 var employees = [
     {
@@ -5,55 +18,26 @@ var employees = [
         phone: "800-555-5555",
         address: "455 S. Boulder Rd, Lafayette, CO"
     },
-
     {
         name: "Ronald",
         phone: "(303) 776-9383",
         address: "245 S Main St Longmont, CO"
-
     }
 ];
 
-
-
-/*
- d8b
- Y8P
-
- 88888b.d88b.   8888b.  888 88888b.
- 888 "888 "88b     "88b 888 888 "88b
- 888  888  888 .d888888 888 888  888
- 888  888  888 888  888 888 888  888
- 888  888  888 "Y888888 888 888  888
- )
- */
-
-
 $(document).ready(function(){
     render_employee_table(employees);
-
-
-
     $("#add").click(function() {
         console.log('clicked!');
         render_edit_box('add');
     });
-
-
-
-})
-
+});
 
 function terminate_employee(index){
     console.log(index);
-
     employees.splice(index, 1);
-
     render_employee_table(employees)
-
 }
-
-
 
 function render_edit_box(type, employee, index){
     var pre_name = "";
@@ -62,22 +46,20 @@ function render_edit_box(type, employee, index){
 
     if (type == "edit") {
         console.log(employee);
-
         pre_name = employee.name;
         pre_phone = employee.phone;
         pre_address = employee.address;
     }
 
-
-    var html = '<div><label id="namelabel">Name </label><input id="edit_name" value="' + pre_name + '"></div><div><label id="phonelabel">Phone</label> <input id="edit_phone" value="'+ pre_phone + '"></div><div><label id="addresslabel">Address </label><input id="edit_address" value="' + pre_address + '"></div>';
-
-
+    var html = '<div><label id="namelabel">Name </label><input id="edit_name" value="' +
+        pre_name + '"></div><div><label id="phonelabel">Phone</label> <input id="edit_phone" value="'+
+        pre_phone + '"></div><div><label id="addresslabel">Address </label><input id="edit_address" value="' +
+        pre_address + '"></div>';
     var button_name = type == "add" ? "add it" : "update it";
 
     html += "<button id='saveit'>"+ button_name + "</button>";
 
     $('#edit_box').html(html);
-
 
     $('#saveit').click(function(){
         var e = {
@@ -85,47 +67,29 @@ function render_edit_box(type, employee, index){
             phone: $("#edit_phone").val(),
             address: $("#edit_address").val()
         };
-
         if(type=="add") {
             add_employee(e);
         }
         else if (type=="edit") {
             update_employee(e, index);
         }
-
         $("#edit_box").html('');
-
     })
-
-
 }
-
 
 function update_employee(data, index){
     console.log("update Employee " + index);
     console.log(data);
-
-    // employees[index].name = data.name;
-    // employees[index].phone = data.phone;
-
-
     employees[index] = data;
     render_employee_table(employees);
 }
 
 function add_employee(data){
-
-
     employees.push(data);
     render_employee_table(employees)
-
-
 }
 
-
 function render_employee_table(data) {
-
-
     console.log('render employee table')
     var html;
 
@@ -135,7 +99,6 @@ function render_employee_table(data) {
     html += "<th>Phone</th>";
     html += "<th>Address</th>";
     html += "</tr></thead>";
-
 
     data.forEach(function (employee, index) {
 
@@ -147,10 +110,8 @@ function render_employee_table(data) {
         html += "<td><button index=" + index + " class='edit'>Edit</button></td>";
         html += "<td><button index=" + index + " class='show_map'>Map it!</button></td>";
 
-
         html += "</tr>";
     });
-
 
     html += "</table>";
 
@@ -163,18 +124,13 @@ function render_employee_table(data) {
 
     $('.edit').click(function () {
         console.log('clicked to update existing');
-
-
         render_edit_box('edit', employees[$(this).attr("index")], $(this).attr("index"));
-
     });
 
     $('.show_map').click(function () {
         console.log('show map click.');
-
         map_location(employees[$(this).attr("index")].address);
     });
-
 
     function map_location(address) {
         geocoder.geocode( { 'address': address}, function(results, status) {
@@ -192,24 +148,4 @@ function render_employee_table(data) {
             }
         });
     }
-
-    /*var map=new google.maps.Map(document.getElementById("display_map")
-     ,mapProp);
-
-
-     // display the marker
-     var myLatlng = new google.maps.LatLng(lat,lng);
-     var marker = new google.maps.Marker({
-     position: myLatlng,
-     map: map,
-     title: 'Here!'
-     });
-     }
-
-     //localstorage
-
-     google.maps.event.addDomListener(window, 'load', initialize);
-
-     */
-
 }
