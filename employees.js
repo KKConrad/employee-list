@@ -88,16 +88,21 @@ function render_edit_box(type, employee, index){
 function update_employee(data, index){
     console.log("update Employee " + index);
     console.log(data);
-    getEmployees()
     employees[index] = data;
     render_employee_table(employees);
 }
 
 function add_employee(data){
-    employees.push(data);
-    render_employee_table(employees);
+    $.ajax({
+        type: "POST",
+        url: 'http://69.164.197.6/employees/',
+        data: data
+    })
+        .done(function(){
+            employees.push(data);
+             render_employee_table(employees);
+    })
 }
-
 function render_employee_table(data) {
     console.log('render employee table');
     var html;
