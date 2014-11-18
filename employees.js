@@ -136,7 +136,7 @@ function render_employee_table(data) {
         geocoder.geocode( { 'address': address}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 $("#map-canvas").show();
-                google.maps.event.trigger(map,'resize'); // tells googlemaps that we resized it, without this it would bug out.
+                google.maps.event.trigger(map,'resize'); // Tells googlemaps that we resized it. Without this line, it would bug out.
                 map.setCenter(results[0].geometry.location);
                 var marker = new google.maps.Marker({
                     map: map,
