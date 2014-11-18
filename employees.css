@@ -9,28 +9,33 @@ table td {
     text-align: center;
 }
 
+.row {
+    margin-bottom: 10px;
+    border: 1px solid black;
+    border-radius:10px;
+}
+
 #employee_list {
     padding: 4px;
     text-align: left;
 }
 
-#namelabel {
+label {
     padding: 5px;
-}
-
-#phonelabel {
-    padding: 5px;
-}
-
-#addresslabel {
-
 }
 #add {
     padding: 10px;
+    margin: 10px;
 }
-
+#saveit {
+    margin-top: 35px;
+    padding: 4px;
+    height: 33px;
+    width: 80px;
+    font-weight: bold;
+}
 #edit_box {
-    padding: 5px;
+    padding: 4px;
 
 }
 
@@ -41,5 +46,4 @@ table td {
     margin-right: auto;
     padding: 100px;
     display: none;
-
 }

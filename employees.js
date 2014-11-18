@@ -51,13 +51,15 @@ function render_edit_box(type, employee, index){
         pre_address = employee.address;
     }
 
-    var html = '<div><label id="namelabel">Name </label><input id="edit_name" value="' +
-        pre_name + '"></div><div><label id="phonelabel">Phone</label> <input id="edit_phone" value="'+
-        pre_phone + '"></div><div><label id="addresslabel">Address </label><input id="edit_address" value="' +
+    var html = '<div class="col-xs-2"><label>Name</label><input id="edit_name" class="form-control" value="' +
+        pre_name + '"></div><div class="col-xs-3"><label>Phone</label> <input id="edit_phone" class="form-control" value="'+
+        pre_phone + '"></div><div class="col-xs-4"><label>Address</label><input id="edit_address" class="form-control" value="' +
         pre_address + '"></div>';
     var button_name = type == "add" ? "add it" : "update it";
+    var cancel_button = type == "cancel" ? "cancel it" : "cancel this";
 
     html += "<button id='saveit'>"+ button_name + "</button>";
+    html += "<button id='cancel'>"+ cancel_button + "</button>";
 
     $('#edit_box').html(html);
 
@@ -76,6 +78,12 @@ function render_edit_box(type, employee, index){
         $("#edit_box").html('');
     })
 }
+    $('#cancel').click(function() {
+        console.log("Clicked");
+        $('#cancel_button').collapse({
+            toggle: false
+        })
+    });
 
 function update_employee(data, index){
     console.log("update Employee " + index);
@@ -132,8 +140,9 @@ function render_employee_table(data) {
         map_location(employees[$(this).attr("index")].address);
     });
 
+
     function map_location(address) {
-        geocoder.geocode( { 'address': address}, function(results, status) {
+        geocoder.geocode( { 'address': address}, function(results, status) { // Decided to omit lat and lng and use address.
             if (status == google.maps.GeocoderStatus.OK) {
                 $("#map-canvas").show();
                 google.maps.event.trigger(map,'resize'); // Tells googlemaps that we resized it. Without this line, it would bug out.
@@ -143,7 +152,7 @@ function render_employee_table(data) {
                     position: results[0].geometry.location
                 });
             } else {
-                $("#map-canvas").hide();
+                $("#map-canvas").hide(); //I want to hide the map if there's an error.
                 alert('Geocode was not successful for the following reason: ' + status);
             }
         });
