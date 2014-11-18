@@ -165,6 +165,7 @@ function render_employee_table(data) {
                 });
             } else {
                 $("#map-canvas").hide(); //I want to hide the map if there's an error.
+                $(".hide-map").hide();
                 alert('Cannot geocode because of this:' + status);
             }
         });
