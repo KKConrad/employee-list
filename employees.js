@@ -12,8 +12,26 @@ function initializeMap() {
 }
 google.maps.event.addDomListener(window, 'load', initializeMap);
 
+function map_location(address) {
+    geocoder.geocode( { 'address': address}, function(results, status) { // Decided to omit lat and lng and use address.
+        if (status == google.maps.GeocoderStatus.OK) {
+            $("#map-canvas").show();
+            $(".hide-map").show();
+            google.maps.event.trigger(map,'resize'); // Tells googlemaps that it resized. Without this line, it would bug out.
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+        } else {
+            $("#map-canvas").hide(); //I want to hide the map if there's an error.
+            $(".hide-map").hide();
+            alert('Cannot geocode because of this:' + status);
+        }
+    });
+}
+
 var employees = [];
-;
 
 $(document).ready(function(){
     (getEmployees());
@@ -23,7 +41,7 @@ function getEmployees(){
     $.ajax({
         url: 'http://69.164.197.6/employees/',
         success: function(employee_data){
-            employees=employee_data;
+            employees = employee_data;
             render_employee_table(employee_data);
         }
     })
@@ -36,14 +54,19 @@ function getEmployees(){
 
 function terminate_employee(index){
     console.log(index);
-    employees.splice(index, 1);
-    render_employee_table(employees)
+    $.ajax({
+        type: "DELETE",
+        url: 'http://69.164.197.6/employees/' + employees[index].id
+    })
+        .done(function(){
+            getEmployees();
+        })
 }
 
 function render_edit_box(type, employee, index){
     var pre_name = "";
     var pre_phone = "";
-    var pre_address= "";
+    var pre_address = "";
 
     if (type == "edit") {
         console.log(employee);
@@ -88,8 +111,14 @@ function render_edit_box(type, employee, index){
 function update_employee(data, index){
     console.log("update Employee " + index);
     console.log(data);
-    employees[index] = data;
-    render_employee_table(employees);
+    $.ajax({
+        type: "POST",
+        url: 'http://69.164.197.6/employees/' + employees[index].id,
+        data: data
+    })
+        .done(function(){
+            getEmployees();
+        })
 }
 
 function add_employee(data){
@@ -151,23 +180,4 @@ function render_employee_table(data) {
         $("#map-canvas").hide();
         $('.hide-map').hide();
     });
-
-    function map_location(address) {
-        geocoder.geocode( { 'address': address}, function(results, status) { // Decided to omit lat and lng and use address.
-            if (status == google.maps.GeocoderStatus.OK) {
-                $("#map-canvas").show();
-                $(".hide-map").show();
-                google.maps.event.trigger(map,'resize'); // Tells googlemaps that it resized. Without this line, it would bug out.
-                map.setCenter(results[0].geometry.location);
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: results[0].geometry.location
-                });
-            } else {
-                $("#map-canvas").hide(); //I want to hide the map if there's an error.
-                $(".hide-map").hide();
-                alert('Cannot geocode because of this:' + status);
-            }
-        });
-    }
 }
